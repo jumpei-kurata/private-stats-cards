@@ -19,7 +19,7 @@ jobs:
       - name: Skip without token
         if: env.HAS_TOKEN != 'true'
         run: echo "::notice::LANGS_TOKEN secret is not set; skipping live run."
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         if: env.HAS_TOKEN == 'true'
       - uses: ./
         if: env.HAS_TOKEN == 'true'

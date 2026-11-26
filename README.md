@@ -9,7 +9,7 @@ No server, no Vercel, no npm install, no repository names leaked.
 <img src="examples/tokyonight/stats.svg" height="165" alt="Stats card (tokyonight)" />
 <img src="examples/tokyonight/languages.svg" height="165" alt="Languages card (tokyonight)" />
 
-<sub>Sample data. Four themes below.</sub>
+<sub>Sample data. Four themes below. Live on <a href="https://github.com/jumpei-kurata">the author's profile</a>.</sub>
 
 </div>
 
@@ -82,7 +82,7 @@ jobs:
   cards:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: jumpei-kurata/private-stats-cards@v1
         with:
           token: ${{ secrets.STATS_TOKEN }}
