@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="467" height="241" viewBox="0 0 467 241" role="img" aria-labelledby="title">
+<title id="title">Jane Doe&#x27;s GitHub Stats</title>
+<style>.t{font:600 18px "Segoe UI",Ubuntu,"Helvetica Neue",Sans-Serif;fill:#58a6ff}.k{font:600 14px "Segoe UI",Ubuntu,"Helvetica Neue",Sans-Serif;fill:#c9d1d9}.v{font:700 14px "Segoe UI",Ubuntu,"Helvetica Neue",Sans-Serif;fill:#f0f6fc}.n{font:400 10px "Segoe UI",Ubuntu,"Helvetica Neue",Sans-Serif;fill:#8b949e}</style>
+<rect x="0.5" y="0.5" width="466" height="240" rx="4.5" fill="#0d1117" stroke="#30363d"/>
+<text x="25" y="35" class="t">Jane Doe&#x27;s GitHub Stats</text>
+<circle cx="31" cy="67" r="4" fill="#8b949e"/>
+<text x="45" y="72" class="k">Total Commits (last year):</text>
+<text x="442" y="72" class="v" text-anchor="end">2,481</text>
+<circle cx="31" cy="93" r="4" fill="#8b949e"/>
+<text x="45" y="98" class="k">Pull Requests (all time):</text>
+<text x="442" y="98" class="v" text-anchor="end">312</text>
+<circle cx="31" cy="119" r="4" fill="#8b949e"/>
+<text x="45" y="124" class="k">PRs Reviewed (all time):</text>
+<text x="442" y="124" class="v" text-anchor="end">157</text>
+<circle cx="31" cy="145" r="4" fill="#8b949e"/>
+<text x="45" y="150" class="k">Issues (all time):</text>
+<text x="442" y="150" class="v" text-anchor="end">96</text>
+<circle cx="31" cy="171" r="4" fill="#8b949e"/>
+<text x="45" y="176" class="k">Repositories:</text>
+<text x="442" y="176" class="v" text-anchor="end">58</text>
+<circle cx="31" cy="197" r="4" fill="#8b949e"/>
+<text x="45" y="202" class="k">Repos Committed To (last year):</text>
+<text x="442" y="202" class="v" text-anchor="end">21</text>
+<text x="25" y="229" class="n">Includes private repositories · updated 2026-01-01</text>
+</svg>

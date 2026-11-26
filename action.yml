@@ -1,0 +1,85 @@
+name: Private Stats Cards
+description: GitHub profile stats and top-languages cards that count your private repos. Read-only token, no server, zero dependencies.
+author: jumpei-kurata
+branding:
+  icon: bar-chart-2
+  color: purple
+
+inputs:
+  token:
+    description: Fine-grained personal access token with read-only Metadata, Pull requests and Issues access to all your repositories. Do not use GITHUB_TOKEN; it cannot see your other private repos.
+    required: true
+  cards:
+    description: Which cards to build, comma-separated (stats, languages).
+    required: false
+    default: stats,languages
+  theme:
+    description: tokyonight, github-dark, github-light or dracula.
+    required: false
+    default: tokyonight
+  hide-languages:
+    description: Comma-separated languages to leave out of the languages card (case-insensitive), e.g. "HTML,CSS,Jupyter Notebook".
+    required: false
+    default: ""
+  languages-count:
+    description: How many languages to show (1-20).
+    required: false
+    default: "8"
+  output-dir:
+    description: Folder (relative to the repo root) where stats.svg and languages.svg are written.
+    required: false
+    default: profile
+  commit:
+    description: Commit and push the cards when they change. Needs `permissions contents write` and actions/checkout. Set to "false" to handle the files yourself.
+    required: false
+    default: "true"
+  commit-message:
+    description: Commit message used when `commit` is true.
+    required: false
+    default: "chore: update profile stats cards"
+
+outputs:
+  stats-path:
+    description: Path of the stats card (empty if it was not built).
+    value: ${{ steps.build.outputs.stats-path }}
+  languages-path:
+    description: Path of the languages card (empty if it was not built).
+    value: ${{ steps.build.outputs.languages-path }}
+
+runs:
+  using: composite
+  steps:
+    - name: Build cards
+      id: build
+      shell: bash
+      env:
+        PSC_TOKEN: ${{ inputs.token }}
+        PSC_CARDS: ${{ inputs.cards }}
+        PSC_THEME: ${{ inputs.theme }}
+        PSC_HIDE_LANGUAGES: ${{ inputs.hide-languages }}
+        PSC_LANGUAGES_COUNT: ${{ inputs.languages-count }}
+        PSC_OUTPUT_DIR: ${{ inputs.output-dir }}
+        ACTION_PATH: ${{ github.action_path }}
+      run: |
+        python3 "$ACTION_PATH/src/cards.py"
+        cards=",${PSC_CARDS// /},"
+        case "$cards" in *,stats,*) echo "stats-path=$PSC_OUTPUT_DIR/stats.svg" >> "$GITHUB_OUTPUT";; esac
+        case "$cards" in *,languages,*) echo "languages-path=$PSC_OUTPUT_DIR/languages.svg" >> "$GITHUB_OUTPUT";; esac
+
+    - name: Commit cards
+      if: inputs.commit == 'true'
+      shell: bash
+      env:
+        PSC_OUTPUT_DIR: ${{ inputs.output-dir }}
+        COMMIT_MESSAGE: ${{ inputs.commit-message }}
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add -- "$PSC_OUTPUT_DIR"
+        if git diff --cached --quiet; then
+          echo "Cards unchanged, nothing to commit."
+          exit 0
+        fi
+        git commit -m "$COMMIT_MESSAGE"
+        git pull --rebase
+        git push
