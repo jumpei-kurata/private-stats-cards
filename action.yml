@@ -17,6 +17,10 @@ inputs:
     description: tokyonight, github-dark, github-light or dracula.
     required: false
     default: tokyonight
+  rows:
+    description: Rows of the stats card, in order. Any of commits, prs, contributions, reviews, issues, repos, repos_contributed.
+    required: false
+    default: commits,prs,contributions,issues,repos,repos_contributed
   hide-languages:
     description: Comma-separated languages to leave out of the languages card (case-insensitive), e.g. "HTML,CSS,Jupyter Notebook".
     required: false
@@ -56,6 +60,7 @@ runs:
         PSC_TOKEN: ${{ inputs.token }}
         PSC_CARDS: ${{ inputs.cards }}
         PSC_THEME: ${{ inputs.theme }}
+        PSC_ROWS: ${{ inputs.rows }}
         PSC_HIDE_LANGUAGES: ${{ inputs.hide-languages }}
         PSC_LANGUAGES_COUNT: ${{ inputs.languages-count }}
         PSC_OUTPUT_DIR: ${{ inputs.output-dir }}

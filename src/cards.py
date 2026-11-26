@@ -5,7 +5,7 @@ Usage (normally called by action.yml):
     python3 src/cards.py --demo --output-dir examples/tokyonight   # no token needed
 
 Every option can also come from an environment variable (PSC_THEME, PSC_CARDS,
-PSC_HIDE_LANGUAGES, PSC_LANGUAGES_COUNT, PSC_OUTPUT_DIR).
+PSC_ROWS, PSC_HIDE_LANGUAGES, PSC_LANGUAGES_COUNT, PSC_OUTPUT_DIR).
 """
 import argparse
 import os
@@ -21,7 +21,7 @@ CARDS = ("stats", "languages")
 
 DEMO_STATS = {
     "name": "Jane Doe", "login": "janedoe", "commits": 2481, "prs": 312,
-    "reviews": 157, "issues": 96, "repos": 58, "repos_contributed": 21,
+    "contributions": 3127, "reviews": 157, "issues": 96, "repos": 58, "repos_contributed": 21,
 }
 DEMO_LANGS = (
     {"TypeScript": 4_200_000, "Python": 3_100_000, "Go": 1_300_000, "Rust": 620_000,
@@ -41,6 +41,7 @@ def parse_args(argv):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     p.add_argument("--cards", default=env("PSC_CARDS") or "stats,languages")
     p.add_argument("--theme", default=env("PSC_THEME") or "tokyonight")
+    p.add_argument("--rows", default=env("PSC_ROWS") or ",".join(render.DEFAULT_ROWS))
     p.add_argument("--hide-languages", default=env("PSC_HIDE_LANGUAGES") or "")
     p.add_argument("--languages-count", type=int, default=int(env("PSC_LANGUAGES_COUNT") or 8))
     p.add_argument("--output-dir", default=env("PSC_OUTPUT_DIR") or "profile")
@@ -51,6 +52,10 @@ def parse_args(argv):
     unknown = [c for c in args.cards if c not in CARDS]
     if unknown or not args.cards:
         p.error(f"--cards must be a comma-separated subset of {', '.join(CARDS)} (got {unknown or 'nothing'})")
+    args.rows = split_list(args.rows)
+    bad_rows = [r for r in args.rows if r not in render.STAT_LABELS]
+    if bad_rows or not args.rows:
+        p.error(f"--rows must be a comma-separated subset of {', '.join(render.STAT_LABELS)} (got {bad_rows or 'nothing'})")
     if args.theme not in render.THEMES:
         p.error(f"unknown theme {args.theme!r}; choose one of {', '.join(render.THEMES)}")
     if not 1 <= args.languages_count <= 20:
@@ -79,9 +84,10 @@ def main(argv=None):
                 stats, updated = DEMO_STATS, DEMO_DATE
             else:
                 stats, updated = github.fetch_stats(token), datetime.now(timezone.utc)
-            write(os.path.join(args.output_dir, "stats.svg"), render.render_stats(stats, theme, updated))
-            for label, key in render.STAT_ROWS:
-                print(f"  {label}: {stats[key]:,}")
+            write(os.path.join(args.output_dir, "stats.svg"),
+                  render.render_stats(stats, theme, updated, args.rows))
+            for key in args.rows:
+                print(f"  {render.STAT_LABELS[key]}: {stats[key]:,}")
 
         if "languages" in args.cards:
             if args.demo:

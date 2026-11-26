@@ -10,8 +10,8 @@
 <text x="45" y="98" class="k">Pull Requests (all time):</text>
 <text x="442" y="98" class="v" text-anchor="end">312</text>
 <circle cx="31" cy="119" r="4" fill="#656d76"/>
-<text x="45" y="124" class="k">PRs Reviewed (all time):</text>
-<text x="442" y="124" class="v" text-anchor="end">157</text>
+<text x="45" y="124" class="k">Contributions (last year):</text>
+<text x="442" y="124" class="v" text-anchor="end">3,127</text>
 <circle cx="31" cy="145" r="4" fill="#656d76"/>
 <text x="45" y="150" class="k">Issues (all time):</text>
 <text x="442" y="150" class="v" text-anchor="end">96</text>

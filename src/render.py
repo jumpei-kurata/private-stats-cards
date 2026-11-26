@@ -22,14 +22,16 @@ THEMES = {
     },
 }
 
-STAT_ROWS = [
-    ("Total Commits (last year)", "commits"),
-    ("Pull Requests (all time)", "prs"),
-    ("PRs Reviewed (all time)", "reviews"),
-    ("Issues (all time)", "issues"),
-    ("Repositories", "repos"),
-    ("Repos Committed To (last year)", "repos_contributed"),
-]
+STAT_LABELS = {
+    "commits": "Total Commits (last year)",
+    "prs": "Pull Requests (all time)",
+    "contributions": "Contributions (last year)",
+    "reviews": "PRs Reviewed (all time)",
+    "issues": "Issues (all time)",
+    "repos": "Repositories",
+    "repos_contributed": "Repos Committed To (last year)",
+}
+DEFAULT_ROWS = ["commits", "prs", "contributions", "issues", "repos", "repos_contributed"]
 
 
 def _frame(width, height, label, theme, style):
@@ -43,10 +45,12 @@ def _frame(width, height, label, theme, style):
     ]
 
 
-def render_stats(stats, theme, updated):
-    """stats: dict from github.fetch_stats; updated: datetime for the footer."""
+def render_stats(stats, theme, updated, rows=None):
+    """stats: dict from github.fetch_stats; updated: datetime for the footer;
+    rows: keys of STAT_LABELS in display order (default DEFAULT_ROWS)."""
+    rows = rows or DEFAULT_ROWS
     width, pad = 467, 25
-    height = 75 + len(STAT_ROWS) * 26 + 10
+    height = 75 + len(rows) * 26 + 10
     title = f"{stats['name']}'s GitHub Stats"
     style = (
         f".t{{font:600 18px {FONT};fill:{theme['title']}}}"
@@ -56,7 +60,8 @@ def render_stats(stats, theme, updated):
     )
     parts = _frame(width, height, title, theme, style)
     parts.append(f'<text x="{pad}" y="35" class="t">{escape(title)}</text>')
-    for i, (label, key) in enumerate(STAT_ROWS):
+    for i, key in enumerate(rows):
+        label = STAT_LABELS[key]
         y = 72 + i * 26
         parts.append(f'<circle cx="{pad + 6}" cy="{y - 5}" r="4" fill="{theme["icon"]}"/>')
         parts.append(f'<text x="{pad + 20}" y="{y}" class="k">{escape(label)}:</text>')

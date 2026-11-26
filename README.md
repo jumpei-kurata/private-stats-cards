@@ -107,6 +107,7 @@ Run it once from the **Actions** tab (**Stats cards → Run workflow**).
 | `token` | **required** | Fine-grained PAT from step 1. `GITHUB_TOKEN` will not work: it cannot see your other repositories. |
 | `cards` | `stats,languages` | Which cards to build. |
 | `theme` | `tokyonight` | `tokyonight`, `github-dark`, `github-light`, `dracula`. |
+| `rows` | `commits,prs,contributions,issues,repos,repos_contributed` | Stats card rows, in order. Also available: `reviews`. |
 | `hide-languages` | *(none)* | Comma-separated, case-insensitive. e.g. `HTML,CSS,Jupyter Notebook`. |
 | `languages-count` | `8` | How many languages to list (1–20). |
 | `output-dir` | `profile` | Where `stats.svg` and `languages.svg` are written. |
@@ -135,7 +136,8 @@ Only totals: counts and language percentages. Repository names, descriptions and
 |---|---|
 | Total Commits (last year) | `contributionsCollection.totalCommitContributions` + `restrictedContributionsCount` (private contributions GitHub only reports as one anonymous total) |
 | Pull Requests / Issues (all time) | The larger of the `viewer` total and a search for `author:<you> is:pr` / `is:issue`. Fine-grained tokens can make the `viewer` total much too low; search counts everything the token can see. |
-| PRs Reviewed (all time) | Search for `reviewed-by:<you> is:pr -author:<you>` |
+| Contributions (last year) | `contributionCalendar.totalContributions` (the number on your profile's contribution graph) |
+| PRs Reviewed (all time), off by default | Search for `reviewed-by:<you> is:pr -author:<you>` |
 | Repositories | Repositories you own (including forks) |
 | Repos Committed To (last year) | `contributionsCollection.totalRepositoriesWithContributedCommits` |
 | Languages | Bytes per language across every non-fork repository you own, top N, normalised to 100% |

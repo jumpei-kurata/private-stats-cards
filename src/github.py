@@ -99,6 +99,7 @@ query($from: DateTime!, $to: DateTime!) {
     issues { totalCount }
     repositories(ownerAffiliations: OWNER) { totalCount }
     contributionsCollection(from: $from, to: $to) {
+      contributionCalendar { totalContributions }
       totalCommitContributions
       totalPullRequestReviewContributions
       restrictedContributionsCount
@@ -139,6 +140,7 @@ def fetch_stats(token, now=None):
         "login": login,
         "commits": cc["totalCommitContributions"] + cc["restrictedContributionsCount"],
         "prs": max(v["pullRequests"]["totalCount"], s["prs"]["issueCount"]),
+        "contributions": cc["contributionCalendar"]["totalContributions"],
         "reviews": max(cc["totalPullRequestReviewContributions"], s["reviews"]["issueCount"]),
         "issues": max(v["issues"]["totalCount"], s["issues"]["issueCount"]),
         "repos": v["repositories"]["totalCount"],

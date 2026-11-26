@@ -71,6 +71,22 @@ class CliTest(unittest.TestCase):
             if old is not None:
                 os.environ["PSC_TOKEN"] = old
 
+    def test_rows_choose_and_order(self):
+        args = cards.parse_args(["--rows", "reviews, commits"])
+        self.assertEqual(args.rows, ["reviews", "commits"])
+        svg = render.render_stats(cards.DEMO_STATS, render.THEMES["tokyonight"], UPDATED, args.rows)
+        self.assertLess(svg.index("PRs Reviewed"), svg.index("Total Commits"))
+        self.assertNotIn("Contributions", svg)
+
+    def test_default_rows_include_contributions(self):
+        svg = render.render_stats(cards.DEMO_STATS, render.THEMES["tokyonight"], UPDATED)
+        self.assertIn("Contributions (last year)", svg)
+        self.assertNotIn("PRs Reviewed", svg)
+
+    def test_bad_row_rejected(self):
+        with self.assertRaises(SystemExit):
+            cards.parse_args(["--rows", "stars"])
+
     def test_bad_theme_rejected(self):
         with self.assertRaises(SystemExit):
             cards.parse_args(["--theme", "nope"])
